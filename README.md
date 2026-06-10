@@ -237,6 +237,7 @@ Please see the documentation for a list of CSS properties and examples of how to
 | Prop | Type | Description |
 | --- | --- | --- |
 | featurableId | `string` | Featurable widget ID |
+| apiBaseUrl? | `string` | Base URL of the Featurable API when using `featurableId`. Default: `"https://api.featurable.com"` |
 | reviews | [GoogleReview](#googlereview)[] | Array of reviews to display, fetched using `dangerouslyFetchPlaceReviews` |
 | layout | `"badge" \| "carousel" \| "custom"` | Layout of the reviews component |
 | nameDisplay?| `"fullNames" \| "firstAndLastInitials" \| "firstNamesOnly"` | How to display names on reviews |;

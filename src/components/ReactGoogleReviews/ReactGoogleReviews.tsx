@@ -146,6 +146,8 @@ type ReactGoogleReviewsWithPlaceIdBaseProps = ReactGoogleReviewsBaseProps & {
      */
     reviews: GoogleReview[];
     featurableId?: never;
+    widgetVersion?: never;
+    apiBaseUrl?: never;
 
     /**
      * Controls the loading state of the component when fetching reviews manually.
@@ -180,6 +182,12 @@ type ReactGoogleReviewsWithFeaturableIdProps = ReactGoogleReviewsBaseProps & {
      * Default: "v1"
      */
     widgetVersion?: WidgetVersion;
+
+    /**
+     * Base URL of the Featurable API.
+     * Default: "https://api.featurable.com"
+     */
+    apiBaseUrl?: string;
 };
 
 type ReactGoogleReviewsBasePropsWithRequired = ReactGoogleReviewsBaseProps &
@@ -272,8 +280,9 @@ type ReactGoogleReviewsProps =
     | ReactGoogleReviewsBadgeProps;
 
 const parent = css`
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-family:
+        -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol';
 `;
 
 const ReactGoogleReviews: React.FC<ReactGoogleReviewsProps> = ({ ...props }) => {
@@ -322,7 +331,7 @@ const ReactGoogleReviews: React.FC<ReactGoogleReviewsProps> = ({ ...props }) => 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [profileUrl, setProfileUrl] = useState<string | null>(
-        props.layout === 'badge' ? props.profileUrl ?? null : null
+        props.layout === 'badge' ? (props.profileUrl ?? null) : null
     );
     const [totalReviewCount, setTotalReviewCount] = useState<number | null>(props.totalReviewCount ?? null);
     const [averageRating, setAverageRating] = useState<number | null>(props.averageRating ?? null);
@@ -338,7 +347,9 @@ const ReactGoogleReviews: React.FC<ReactGoogleReviewsProps> = ({ ...props }) => 
         if (props.featurableId) {
             // Default to v1 for backwards compatability
             const version = props.widgetVersion ?? 'v1';
-            const apiUrl = `https://featurable.com/api/${version}/widgets/${props.featurableId}`;
+            // Strip trailing slashes so both "https://api.featurable.com" and "https://api.featurable.com/" work
+            const baseUrl = (props.apiBaseUrl ?? 'https://api.featurable.com').replace(/\/+$/, '');
+            const apiUrl = `${baseUrl}/${version}/widgets/${props.featurableId}`;
 
             fetch(apiUrl, {
                 method: 'GET',
@@ -370,7 +381,7 @@ const ReactGoogleReviews: React.FC<ReactGoogleReviewsProps> = ({ ...props }) => 
         } else {
             setLoading(false);
         }
-    }, [props.featurableId, filterReviews, mapReviews]);
+    }, [props.featurableId, props.widgetVersion, props.apiBaseUrl, filterReviews, mapReviews]);
 
     if ((loading && typeof props.isLoading === 'undefined') || props.isLoading) {
         return (
