@@ -3,7 +3,7 @@ import { GoogleReview, GoogleReviewV2, FeaturableAPIResponseV1, FeaturableAPIRes
 /**
  * Transforms a v2 GoogleReview into v1 format for backwards compatibility
  */
-export function transformV2ReviewToV1(reviewV2: GoogleReviewV2): GoogleReview {
+export function transformV2ReviewToV1(reviewV2: GoogleReviewV2, disableTranslation = false): GoogleReview {
     return {
         reviewId: reviewV2.id,
         reviewer: {
@@ -12,7 +12,7 @@ export function transformV2ReviewToV1(reviewV2: GoogleReviewV2): GoogleReview {
             isAnonymous: !reviewV2.author?.name,
         },
         starRating: reviewV2.rating ? reviewV2.rating.value : 0,
-        comment: reviewV2.text,
+        comment: disableTranslation ? (reviewV2.originalText || reviewV2.text) : reviewV2.text,
         createTime: reviewV2.createdAt,
         updateTime: reviewV2.publishedAt ?? null,
     };
@@ -21,7 +21,7 @@ export function transformV2ReviewToV1(reviewV2: GoogleReviewV2): GoogleReview {
 /**
  * Transforms a v2 API response into v1 format for backwards compatibility
  */
-export function transformV2ResponseToV1(responseV2: FeaturableAPIResponseV2): FeaturableAPIResponseV1 {
+export function transformV2ResponseToV1(responseV2: FeaturableAPIResponseV2, disableTranslation = false): FeaturableAPIResponseV1 {
     if (!responseV2.success) {
         return { success: false };
     }
@@ -31,7 +31,7 @@ export function transformV2ResponseToV1(responseV2: FeaturableAPIResponseV2): Fe
         profileUrl: responseV2.widget.gbpLocationSummary.writeAReviewUri,
         totalReviewCount: responseV2.widget.gbpLocationSummary.reviewsCount,
         averageRating: responseV2.widget.gbpLocationSummary.rating,
-        reviews: responseV2.widget.reviews.map(transformV2ReviewToV1),
+        reviews: responseV2.widget.reviews.map((review) => transformV2ReviewToV1(review, disableTranslation)),
     };
 }
 

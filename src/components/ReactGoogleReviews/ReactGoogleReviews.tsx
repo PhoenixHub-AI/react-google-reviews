@@ -359,7 +359,7 @@ const ReactGoogleReviews: React.FC<ReactGoogleReviewsProps> = ({ ...props }) => 
                     // Transform v2 response to v1 format for backwards compatibility
                     let normalizedData: FeaturableAPIResponseV1;
                     if (version === 'v2' && isV2Response(data)) {
-                        normalizedData = transformV2ResponseToV1(data);
+                        normalizedData = transformV2ResponseToV1(data, props.disableTranslation);
                     } else {
                         normalizedData = data as FeaturableAPIResponseV1;
                     }

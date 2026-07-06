@@ -15,7 +15,7 @@ root.render(
         <ReactGoogleReviews featurableId="example" layout="badge" widgetVersion="v1" />
 
         <h2>Carousel v2:</h2>
-        <ReactGoogleReviews featurableId="example" layout="carousel" widgetVersion="v2" />
+        <ReactGoogleReviews featurableId="18221075-2800-49ea-9f26-94068567fc08" layout="carousel" widgetVersion="v2" disableTranslation={true} />
 
         <h2>Badge v2:</h2>
         <ReactGoogleReviews featurableId="example" layout="badge" widgetVersion="v2" />
