@@ -30,7 +30,7 @@
         "email": "ryan@featurable.com"
     },
     "devDependencies": {
-        "@rollup/plugin-commonjs": "^26.0.1",
+        "@rollup/plugin-commonjs": "^29.0.3",
         "@rollup/plugin-html": "^1.0.3",
         "@rollup/plugin-node-resolve": "^15.2.3",
         "@rollup/plugin-replace": "^5.0.7",
